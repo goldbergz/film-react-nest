@@ -1,25 +1,29 @@
 import { Injectable } from '@nestjs/common';
 
+import { FilmsRepository } from '../repository/films.repository';
+import { FilmDocument } from '../repository/film.schema';
 import {
   FilmDto,
   FilmsResponseDto,
   ScheduleResponseDto,
 } from './dto/films.dto';
+import { toFilmDto, toScheduleDto } from './dto/films.mapper';
 
 @Injectable()
 export class FilmsService {
-  // @todo: заменить заглушку на обращение к репозиторию
-  async getAllFilms(): Promise<FilmsResponseDto> {
-    const films: FilmDto[] = [];
+  constructor(private readonly filmsRepository: FilmsRepository) {}
 
-    return { total: films.length, items: films };
+  async getAllFilms(): Promise<FilmsResponseDto> {
+    const films: FilmDocument[] = await this.filmsRepository.findAll();
+    const items: FilmDto[] = films.map(toFilmDto);
+
+    return { total: items.length, items };
   }
 
-  // @todo: заменить заглушку на обращение к репозиторию (id понадобится для поиска фильма)
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async getFilmSchedule(id: string): Promise<ScheduleResponseDto> {
-    const schedule: ScheduleResponseDto['items'] = [];
+    const film = await this.filmsRepository.findById(id);
+    const items = (film?.schedule ?? []).map(toScheduleDto);
 
-    return { total: schedule.length, items: schedule };
+    return { total: items.length, items };
   }
 }
