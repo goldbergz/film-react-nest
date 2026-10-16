@@ -17,4 +17,21 @@ export class FilmsRepository {
   async findById(id: string): Promise<FilmDocument | null> {
     return this.filmModel.findOne({ id }).exec();
   }
+
+  async bookSeat(
+    filmId: string,
+    sessionId: string,
+    seat: string,
+  ): Promise<FilmDocument | null> {
+    return this.filmModel
+      .findOneAndUpdate(
+        {
+          id: filmId,
+          schedule: { $elemMatch: { id: sessionId, taken: { $ne: seat } } },
+        },
+        { $addToSet: { 'schedule.$.taken': seat } },
+        { new: true },
+      )
+      .exec();
+  }
 }
