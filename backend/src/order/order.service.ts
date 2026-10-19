@@ -15,6 +15,15 @@ export class OrderService {
   constructor(private readonly filmsRepository: FilmsRepository) {}
 
   async createOrder(dto: CreateOrderDto): Promise<OrderResponseDto> {
+    if (!dto || !Array.isArray(dto.tickets)) {
+      throw new BadRequestException(
+        'Некорректное тело запроса: ожидается объект с массивом tickets',
+      );
+    }
+    if (dto.tickets.length === 0) {
+      throw new BadRequestException('Заказ не содержит билетов');
+    }
+
     const plan = await this.validateOrder(dto.tickets);
 
     const items: TicketWithIdDto[] = [];
