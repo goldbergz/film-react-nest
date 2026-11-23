@@ -1,12 +1,12 @@
 # FILM!
 
-## Установка
+Задеплоенное приложение: http://film-review3.duckdns.org
 
-### MongoDB
+## Запуск локально
 
-Установите MongoDB скачав дистрибутив с официального сайта или с помощью пакетного менеджера вашей ОС. Также можно воспользоваться Docker (см. ветку `feat/docker`.
+### База данных
 
-Выполните скрипт `test/mongodb_initial_stub.js` в консоли `mongo`.
+Нужен запущенный PostgreSQL.
 
 ### Бэкенд
 
@@ -14,23 +14,52 @@
 
 `cd backend`
 
-Установите зависимости (точно такие же, как в package-lock.json) помощью команд
+Установите зависимости
 
-`npm ci` или `yarn install --frozen-lockfile`
+`npm ci`
 
-Создайте `.env` файл из примера `.env.example`, в нём укажите:
-
-* `DATABASE_DRIVER` - тип драйвера СУБД - в нашем случае это `mongodb` 
-* `DATABASE_URL` - адрес СУБД MongoDB, например `mongodb://127.0.0.1:27017/practicum`.  
-
-MongoDB должна быть установлена и запущена.
+Создайте `.env` файл из примера `.env.example`, при необходимости поправьте параметры подключения к базе.
 
 Запустите бэкенд:
 
-`npm start:debug`
+`npm run start:dev`
 
-Для проверки отправьте тестовый запрос с помощью Postman или `curl`.
+Формат логов задаётся переменной `LOG_FORMAT`: `dev` (по умолчанию), `json` или `tskv`.
 
+### Фронтенд
 
+`cd frontend`
 
+`npm ci`
 
+`npm run dev`
+
+### Наполнение базы тестовыми данными
+
+Выполните sql-файлы из `backend/test` в порядке: `prac.init.sql`, `prac.films.sql`, `prac.shedules.sql`.
+
+## Запуск в Docker
+
+`cp .env.example .env`
+
+`docker compose up -d --build`
+
+Приложение будет доступно на http://localhost:80, pgAdmin — на http://localhost:8080 (данные входа в `.env`).
+
+## Деплой
+
+При каждом пуше GitHub Actions собирает образы и публикует их в ghcr.io (см. `.github/workflows/publish.yml`).
+
+На сервере в каталоге проекта лежат `docker-compose.prod.yml` и `.env`, образы берутся из реестра:
+
+`docker compose -f docker-compose.prod.yml up -d`
+
+Обновление до свежих образов — скрипт `deploy.sh` в каталоге проекта на сервере. pgAdmin доступен только с localhost сервера, подключаться через ssh-туннель:
+
+`ssh -L 8080:localhost:8080 <user>@<server>`
+
+## Тесты
+
+`cd backend`
+
+`npm test`
