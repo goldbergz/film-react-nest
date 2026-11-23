@@ -1,7 +1,7 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { randomUUID } from 'node:crypto';
 
-import { FilmDocument } from '../repository/film.schema';
+import { FilmModel } from '../repository/film.model';
 import { FilmsRepository } from '../repository/films.repository';
 import {
   CreateOrderDto,
@@ -45,7 +45,7 @@ export class OrderService {
   private async validateOrder(
     tickets: TicketDto[],
   ): Promise<Array<[TicketDto, string]>> {
-    const films = new Map<string, FilmDocument>();
+    const films = new Map<string, FilmModel>();
     const seatsInOrder = new Set<string>();
     const plan: Array<[TicketDto, string]> = [];
 

@@ -1,7 +1,7 @@
-import { FilmDocument, Schedule } from '../../repository/film.schema';
+import { FilmModel, ScheduleModel } from '../../repository/film.model';
 import { FilmDto, ScheduleDto } from './films.dto';
 
-export function toScheduleDto(schedule: Schedule): ScheduleDto {
+export function toScheduleDto(schedule: ScheduleModel): ScheduleDto {
   return {
     id: schedule.id,
     daytime: new Date(schedule.daytime).toISOString(),
@@ -13,7 +13,7 @@ export function toScheduleDto(schedule: Schedule): ScheduleDto {
   };
 }
 
-export function toFilmDto(film: FilmDocument): FilmDto {
+export function toFilmDto(film: FilmModel): FilmDto {
   return {
     id: film.id,
     rating: film.rating,

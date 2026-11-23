@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 
 import { FilmsRepository } from '../repository/films.repository';
-import { FilmDocument } from '../repository/film.schema';
+import { FilmModel } from '../repository/film.model';
 import {
   FilmDto,
   FilmsResponseDto,
@@ -14,7 +14,7 @@ export class FilmsService {
   constructor(private readonly filmsRepository: FilmsRepository) {}
 
   async getAllFilms(): Promise<FilmsResponseDto> {
-    const films: FilmDocument[] = await this.filmsRepository.findAll();
+    const films: FilmModel[] = await this.filmsRepository.findAll();
     const items: FilmDto[] = films.map(toFilmDto);
 
     return { total: items.length, items };
