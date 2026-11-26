@@ -4,6 +4,7 @@ import { ConfigModule as NestConfigModule } from '@nestjs/config';
 import * as path from 'node:path';
 
 import { ConfigModule } from './config/config.module';
+import { LoggerModule } from './logger/logger.module';
 import { RepositoryModule } from './repository/repository.module';
 import { FilmsModule } from './films/films.module';
 import { OrderModule } from './order/order.module';
@@ -19,6 +20,7 @@ import { OrderModule } from './order/order.module';
       exclude: ['/(.*)'],
     }),
     ConfigModule,
+    LoggerModule,
     RepositoryModule,
     FilmsModule,
     OrderModule,

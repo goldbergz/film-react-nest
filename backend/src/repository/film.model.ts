@@ -1,7 +1,7 @@
 export interface ScheduleModel {
   id: string;
   daytime: Date;
-  hall: string | number;
+  hall: number;
   rows: number;
   seats: number;
   price: number;
